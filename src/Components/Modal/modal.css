@@ -1,0 +1,16 @@
+.modal_rectangle{
+    padding: 0 50px 50px 50px;
+}
+.modal_title{
+  text-align: center
+}
+
+.modal_inputs{
+  display: flex;
+  flex-direction: column;
+  align-items: space-around;
+}
+.modal_input{
+
+}
+

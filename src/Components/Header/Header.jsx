@@ -2,6 +2,7 @@ import React from "react";
 import {
   BrowserRouter as Router,
   Link,
+  NavLink 
 } from "react-router-dom";
 
 const Header = () => {
@@ -21,12 +22,12 @@ const Header = () => {
 
   return (
     <div style={styles.header}>
-        <Link to="/"> <h1 style={{textDecoration: 'none', color: "#fff", fontSize: 30, paddingLeft: 30}}>Main</h1></Link>
+        <NavLink  to="/" activeStyle={{fontSize: 60,}}  > <h1 style={{textDecoration: 'none', color: "#fff", fontSize: 30, paddingLeft: 30}}>Main</h1></NavLink >
       <div  style={styles.pages}>
-      <Link to="/companies"><h1 style={{textDecoration: 'none', color: "#fff", fontSize: 30}}>Companies</h1></Link>
+      <NavLink activeStyle={{fontSize: 60}} to="/companies"><h1 style={{textDecoration: 'none', color: "#fff", fontSize: 30}}>Companies</h1></NavLink>
 
       
-      <Link to="/employees">  <h1 style={{textDecoration: 'none', color: "#fff", fontSize: 30, paddingLeft: 30, paddingRight: 30}}>Employees</h1></Link>
+      <NavLink activeStyle={{fontSize: 60}} to="/employees">  <h1 style={{textDecoration: 'none', color: "#fff", fontSize: 30, paddingLeft: 30, paddingRight: 30}}>Employees</h1></NavLink>
       </div>
     </div>
   );
