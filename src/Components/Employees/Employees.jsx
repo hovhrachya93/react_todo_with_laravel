@@ -79,11 +79,8 @@ const Employees = () => {
   };
 
   const sendData = (e) => {
-    // e.preventDefault();
-    // axios
-    //   .post("", employeeDataForSend)
-    //   .then(res => console.log(res.data));
-    console.group(employeeDataForSend);
+    e.preventDefault();
+    axios.post("http://127.0.0.1:8000/api/employees", employeeDataForSend)
   };
 
   const handleClickOpenModal = (row) => {
@@ -126,11 +123,17 @@ const Employees = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get("employees.json");
+      const response = await axios.get("http://127.0.0.1:8000/api/employees");
       setEmployees(response.data);
     };
     fetchData();
   }, []);
+
+
+    const deleteEmployee = async (id) => {
+      await axios.delete(`http://127.0.0.1:8000/api/employees/${id}`);
+    };
+    
 
   const deleteBtn = () => (
     <Fab color="secondary" variant="extended">
@@ -138,20 +141,23 @@ const Employees = () => {
     </Fab>
   );
 
-  const assignEmployees = Object.assign({}, employees);
+  const assignEmployees = Object.assign({}, [employees]);
+  console.log(assignEmployees)
+  console.log( assignEmployees[0].length)
+  console.log("??",assignEmployees[0].first_name)
 
   const row = () => {
     const newRow = [];
-    if (assignEmployees.data) {
-      for (var i = 0; i < assignEmployees.data.length; i++) {
+    if (assignEmployees) {
+      for (var i = 0; i < assignEmployees[0].length; i++) {
         newRow.push(
           createData(
-            assignEmployees.data[i][0],
-            assignEmployees.data[i][1],
-            assignEmployees.data[i][2],
-            assignEmployees.data[i][3],
-            assignEmployees.data[i][4],
-            assignEmployees.data[i][5],
+            assignEmployees[0][i].id,
+            assignEmployees[0][i].first_name,
+            assignEmployees[0][i].last_name,
+            assignEmployees[0][i].company,
+            assignEmployees[0][i].email,
+            assignEmployees[0][i].phone,
             deleteBtn()
           )
         );
@@ -167,7 +173,7 @@ const Employees = () => {
       <div className={classes.main}>
         <h1>Employees</h1>
 
-        {!assignEmployees.data ? (
+        {!assignEmployees ? (
           <Spinner />
         ) : (
           <Paper className={classes.root}>
@@ -206,9 +212,7 @@ const Employees = () => {
                                 onClick={
                                   column.id === "del"
                                     ? () =>
-                                        alert(
-                                          `you want delete company with ${row.id} id`
-                                        )
+                                    deleteEmployee(row.id)
                                     : () => handleClickOpenModal(row)
                                 }
                               >

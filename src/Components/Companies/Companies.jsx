@@ -71,7 +71,7 @@ const Companies = () => {
   const addLogoHandler = (e)=> setLogo(e.target.value)
   const addWebsiteHandler = (e)=> setWebsite(e.target.value)
 
-  const companyDataForSend ={
+  const companyDataForSend = {
     name,
     email,
     logo,
@@ -79,12 +79,11 @@ const Companies = () => {
   }
 
   const sendData = e => {
-    // e.preventDefault();
-    // axios
-    //   .post("", companyDataForSend)
-    //   .then(res => console.log(res.data));
-    console.group(companyDataForSend)
+    e.preventDefault();
+    axios.post("http://127.0.0.1:8000/api/companies", companyDataForSend)
+    console.log(companyDataForSend)
   };
+
 
   const [openModal, setOpenModal] = React.useState(false);
   const handleClickOpenModal = (row) => {
@@ -103,11 +102,15 @@ const Companies = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get("components.json");
+      const response = await axios.get("http://127.0.0.1:8000/api/companies");
       setCompanies(response.data);
     };
     fetchData();
   }, []);
+
+  const deleteCompany = async (id) => {
+    await axios.delete(`http://127.0.0.1:8000/api/companies/${id}`);
+  };
 
   const deleteBtn = () => (
     <Fab color="secondary" variant="extended">
@@ -115,8 +118,11 @@ const Companies = () => {
     </Fab>
   );
 
-  const assignCompanies = Object.assign({}, companies);
-  // console.log(assignCompanies)
+  const assignCompanies = Object.assign({}, [companies]);
+  console.log('1', assignCompanies)
+  console.log('2', assignCompanies.length)
+  console.log('3', assignCompanies[0])
+  console.log('4', assignCompanies[0][0])
 
   const columns = [
     { id: "id", label: "id" },
@@ -131,17 +137,18 @@ const Companies = () => {
     return { id, name, email, logo, website, del };
   };
 
+
   const row = () => {
     const newRow = [];
-    if (assignCompanies.data) {
-      for (var i = 0; i < assignCompanies.data.length; i++) {
+    if (assignCompanies) {
+      for (var i = 0; i < assignCompanies[0].length; i++) {
         newRow.push(
           createData(
-            assignCompanies.data[i][0],
-            assignCompanies.data[i][1],
-            assignCompanies.data[i][2],
-            assignCompanies.data[i][3],
-            assignCompanies.data[i][4],
+            assignCompanies[0][i].id,
+            assignCompanies[0][i].name,
+            assignCompanies[0][i].email,
+            assignCompanies[0][i].logo,
+            assignCompanies[0][i].website,
             deleteBtn()
           )
         );
@@ -165,7 +172,7 @@ const Companies = () => {
     <div className={classes.background}>
       <div className={classes.main}>
         <h1>Companies</h1>
-        {!assignCompanies.data ? (
+        {!assignCompanies ? (
           <Spinner />
         ) : (
           <Paper className={classes.root}>
@@ -204,9 +211,7 @@ const Companies = () => {
                                 onClick={
                                   column.id === "del"
                                     ? () =>
-                                        alert(
-                                          `you want delete company with ${row.id} id`
-                                        )
+                                    deleteCompany(row.id)
                                     : column.id === "logo"
                                     ? () => handleClickOpenImageModal(row)
                                     : () => handleClickOpenModal(row)
@@ -283,7 +288,7 @@ const Companies = () => {
             id="standard-basic"
             label="website"
           />
-          <Fab   onClick={sendData} color="primary" variant="extended">
+          <Fab onClick={sendData} color="primary" variant="extended">
             <Send />
             send
           </Fab>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import Dialog from "@material-ui/core/Dialog";
 import TextField from "@material-ui/core/TextField";
 import Fab from "@material-ui/core/Fab";
@@ -65,19 +66,17 @@ const Modal = (props) => {
   };
 
   const sendEmployeeData = (e) => {
-    // e.preventDefault();
-    // axios
-    //   .post("", employeeDataForSend)
-    //   .then(res => console.log(res.data));
-    console.group(employeeDataForSend);
+    e.preventDefault();
+     axios.put(`http://127.0.0.1:8000/api/employees/${modalFields.id}`,    
+      employeeDataForSend
+      )
   };
 
   const sendCompanyData = (e) => {
-    // e.preventDefault();
-    // axios
-    //   .post("", employeeDataForSend)
-    //   .then(res => console.log(res.data));
-    console.group(companyDataForSend);
+    e.preventDefault();
+     axios.put(`http://127.0.0.1:8000/api/companies/${modalFields.id}`,    
+     companyDataForSend
+      )
   };
 
   return (
@@ -87,10 +86,12 @@ const Modal = (props) => {
       open={open}
     >
       {isImageModal ? (
-        <img
-          src="https://s.yimg.com/uu/api/res/1.2/DdytqdFTgtQuxVrHLDdmjQ--~B/aD03MTY7dz0xMDgwO3NtPTE7YXBwaWQ9eXRhY2h5b24-/https://media-mbst-pub-ue1.s3.amazonaws.com/creatr-uploaded-images/2019-11/7b5b5330-112b-11ea-a77f-7c019be7ecae"
-          alt="Logo"
-        />
+        // <img
+        //   // src="https://s.yimg.com/uu/api/res/1.2/DdytqdFTgtQuxVrHLDdmjQ--~B/aD03MTY7dz0xMDgwO3NtPTE7YXBwaWQ9eXRhY2h5b24-/https://media-mbst-pub-ue1.s3.amazonaws.com/creatr-uploaded-images/2019-11/7b5b5330-112b-11ea-a77f-7c019be7ecae"
+        //   src="modalFields.logo"
+        //   alt="Logo"
+        // />
+        <p>{modalFields.logo}</p>
       ) : (
         <div className="modal_rectangle">
           <h1 className="modal_title">rename {title}</h1>
