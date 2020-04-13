@@ -8,7 +8,6 @@ import {
   useParams,
 
 } from "react-router-dom";
-import { ProtectedRoute } from "./Components/Auth/protected.route";
 import { Companies, Employees, Header, Main } from "./Components/Components";
 
 function App() {
