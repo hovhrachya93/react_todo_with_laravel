@@ -6,7 +6,9 @@ import {
   Link,
   useRouteMatch,
   useParams,
+
 } from "react-router-dom";
+import { ProtectedRoute } from "./Components/Auth/protected.route";
 import { Companies, Employees, Header, Main } from "./Components/Components";
 
 function App() {
@@ -14,18 +16,26 @@ function App() {
     <Router>
       <Header />
       <Switch>
+
       <Route exact path="/">
         <Main/>
         </Route>
+        
       <Route path="/employees">
       <Employees />
           </Route>
+
      <Route path="/companies">
         <Companies />
           </Route>
+
       </Switch>
     </Router>
+   
   );
 }
 
 export default App;
+
+
+

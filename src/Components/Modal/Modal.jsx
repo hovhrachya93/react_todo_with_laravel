@@ -22,6 +22,7 @@ const Modal = (props) => {
     title,
     modalFields,
     isImageModal,
+    modalUseEffect
   } = props;
   const classes = useStyles();
   const handleClose = () => {
@@ -65,18 +66,20 @@ const Modal = (props) => {
     website,
   };
 
-  const sendEmployeeData = (e) => {
+  const sendEmployeeData =async (e) => {
     e.preventDefault();
-     axios.put(`http://127.0.0.1:8000/api/employees/${modalFields.id}`,    
+    await axios.put(`http://127.0.0.1:8000/api/employees/${modalFields.id}`,    
       employeeDataForSend
       )
+      modalUseEffect()
   };
 
-  const sendCompanyData = (e) => {
+  const sendCompanyData = async (e) => {
     e.preventDefault();
-     axios.put(`http://127.0.0.1:8000/api/companies/${modalFields.id}`,    
+    await axios.put(`http://127.0.0.1:8000/api/companies/${modalFields.id}`,    
      companyDataForSend
       )
+      modalUseEffect()
   };
 
   return (
@@ -91,7 +94,10 @@ const Modal = (props) => {
         //   src="modalFields.logo"
         //   alt="Logo"
         // />
-        <p>{modalFields.logo}</p>
+        <>
+        <img src={modalFields.logo} />
+        {/* <p>{modalFields.logo}</p> */}
+        </>
       ) : (
         <div className="modal_rectangle">
           <h1 className="modal_title">rename {title}</h1>

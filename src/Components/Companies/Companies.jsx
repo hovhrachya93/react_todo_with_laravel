@@ -1,55 +1,55 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import TextField from "@material-ui/core/TextField";
-import Fab from "@material-ui/core/Fab";
-import Send from "@material-ui/icons/Send";
-import Delete from "@material-ui/icons/Delete";
-import IconButton from "@material-ui/core/IconButton";
-import PhotoCamera from "@material-ui/icons/PhotoCamera";
-import Modal from "../Modal/Modal";
-import Spinner from "../Spinner/Spinner";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import TextField from '@material-ui/core/TextField';
+import Fab from '@material-ui/core/Fab';
+import Send from '@material-ui/icons/Send';
+import Delete from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import Modal from '../Modal/Modal';
+import Spinner from '../Spinner/Spinner';
 
 const useStyles = makeStyles({
   background: {
-    width: "100%",
-    height: "100vh",
-    backgroundColor: "#8F80E8",
+    width: '100%',
+    minHeight: '100vh',
+    backgroundColor: '#8F80E8',
   },
   main: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   root: {
-    width: "70%",
-    backgroundColor: "#8C9BFF",
+    width: '70%',
+    backgroundColor: '#8C9BFF',
   },
   addFields: {
-    backgroundColor: "#C499FF",
-    display: "flex",
-    justifyContent: "center",
+    backgroundColor: '#C499FF',
+    display: 'flex',
+    justifyContent: 'center',
     marginTop: 50,
     paddingTop: 15,
     paddingBottom: 20,
-    width: "70%",
+    width: '70%',
     borderRadius: 20,
   },
   addField: {
     paddingRight: 20,
-    width: "12%",
+    width: '12%',
   },
   inputCamera: {
-    display: "none",
+    display: 'none',
   },
 });
 
@@ -66,24 +66,17 @@ const Companies = () => {
   const [logo, setLogo] = useState();
   const [website, setWebsite] = useState();
 
-  const addNameHandler = (e)=> setName(e.target.value)
-  const addEmailHandler = (e)=> setEmail(e.target.value)
-  const addLogoHandler = (e)=> setLogo(e.target.value)
-  const addWebsiteHandler = (e)=> setWebsite(e.target.value)
+  const addNameHandler = (e) => setName(e.target.value);
+  const addEmailHandler = (e) => setEmail(e.target.value);
+  const addLogoHandler = (e) => setLogo(e.target.value);
+  const addWebsiteHandler = (e) => setWebsite(e.target.value);
 
   const companyDataForSend = {
     name,
     email,
     logo,
-    website
-  }
-
-  const sendData = e => {
-    e.preventDefault();
-    axios.post("http://127.0.0.1:8000/api/companies", companyDataForSend)
-    console.log(companyDataForSend)
+    website,
   };
-
 
   const [openModal, setOpenModal] = React.useState(false);
   const handleClickOpenModal = (row) => {
@@ -100,43 +93,52 @@ const Companies = () => {
     setIsImageModal(false);
   };
 
+  const fetchData = async () => {
+    const response = await axios.get('http://127.0.0.1:8000/api/companies');
+    setCompanies(response.data);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get("http://127.0.0.1:8000/api/companies");
-      setCompanies(response.data);
-    };
     fetchData();
   }, []);
 
-  const deleteCompany = async (id) => {
-    await axios.delete(`http://127.0.0.1:8000/api/companies/${id}`);
+  const sendData = async (e) => {
+    e.preventDefault();
+    await axios.post('http://127.0.0.1:8000/api/companies', companyDataForSend);
+    fetchData();
   };
 
+  const deleteCompany = async (id) => {
+    await axios.delete(`http://127.0.0.1:8000/api/companies/${id}`);
+    fetchData();
+  };
+  const modalUseEffect=()=>{
+    return(
+      fetchData(),
+      setOpenModal(false)
+    )}
+
   const deleteBtn = () => (
-    <Fab color="secondary" variant="extended">
+    <Fab color='secondary' variant='extended'>
       <Delete />
     </Fab>
   );
 
   const assignCompanies = Object.assign({}, [companies]);
-  console.log('1', assignCompanies)
-  console.log('2', assignCompanies.length)
-  console.log('3', assignCompanies[0])
-  console.log('4', assignCompanies[0][0])
+console.log(assignCompanies[0].length)
 
   const columns = [
-    { id: "id", label: "id" },
-    { id: "name", label: "name" },
-    { id: "email", label: "email" },
-    { id: "logo", label: "logo" },
-    { id: "website", label: "website" },
-    { id: "del", label: "delete" },
+    { id: 'id', label: 'id' },
+    { id: 'name', label: 'name' },
+    { id: 'email', label: 'email' },
+    { id: 'logo', label: 'logo' },
+    { id: 'website', label: 'website' },
+    { id: 'del', label: 'delete' },
   ];
 
   const createData = (id, name, email, logo, website, del) => {
     return { id, name, email, logo, website, del };
   };
-
 
   const row = () => {
     const newRow = [];
@@ -172,19 +174,19 @@ const Companies = () => {
     <div className={classes.background}>
       <div className={classes.main}>
         <h1>Companies</h1>
-        {!assignCompanies ? (
+        {assignCompanies[0].length===0 ? (
           <Spinner />
         ) : (
           <Paper className={classes.root}>
-            <TableContainer className="table_container">
-              <Table stickyHeader aria-label="sticky table">
+            <TableContainer className='table_container'>
+              <Table stickyHeader aria-label='sticky table'>
                 <TableHead>
                   <TableRow>
                     {columns.map((column) => (
                       <TableCell
                         key={column.id}
                         align={column.align}
-                        style={{ backgroundColor: "#C499FF" }}
+                        style={{ backgroundColor: '#C499FF' }}
                       >
                         {column.label}
                       </TableCell>
@@ -198,7 +200,7 @@ const Companies = () => {
                       return (
                         <TableRow
                           hover
-                          role="checkbox"
+                          role='checkbox'
                           tabIndex={-1}
                           key={row.code}
                         >
@@ -209,15 +211,14 @@ const Companies = () => {
                                 key={column.id}
                                 align={column.align}
                                 onClick={
-                                  column.id === "del"
-                                    ? () =>
-                                    deleteCompany(row.id)
-                                    : column.id === "logo"
+                                  column.id === 'del'
+                                    ? () => deleteCompany(row.id)
+                                    : column.id === 'logo'
                                     ? () => handleClickOpenImageModal(row)
                                     : () => handleClickOpenModal(row)
                                 }
                               >
-                                {column.format && typeof value === "number"
+                                {column.format && typeof value === 'number'
                                   ? column.format(value)
                                   : value}
                               </TableCell>
@@ -231,7 +232,8 @@ const Companies = () => {
                     onClose={handleCloseModal}
                     modalFields={companyModalRow}
                     isImageModal={isImageModal}
-                    title="company"
+                    modalUseEffect={modalUseEffect}
+                    title='company'
                   />
                 </TableBody>
               </Table>
@@ -239,7 +241,7 @@ const Companies = () => {
 
             <TablePagination
               rowsPerPageOptions={[1, 2, 5, 10, 15]}
-              component="div"
+              component='div'
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
@@ -249,34 +251,34 @@ const Companies = () => {
           </Paper>
         )}
       </div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <form className={classes.addFields} autoComplete="off">
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <form className={classes.addFields} autoComplete='off'>
           <TextField
             className={classes.addField}
-            id="standard-basic"
-            label="name"
+            id='standard-basic'
+            label='name'
             onChange={addNameHandler}
           />
           <TextField
             className={classes.addField}
-            id="standard-basic"
-            label="email"
+            id='standard-basic'
+            label='email'
             onChange={addEmailHandler}
           />
 
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <input
-              accept="image/*"
+              accept='image/*'
               className={classes.inputCamera}
-              id="icon-button-file"
-              type="file"
+              id='icon-button-file'
+              type='file'
               onChange={addLogoHandler}
             />
-            <label htmlFor="icon-button-file">
+            <label htmlFor='icon-button-file'>
               <IconButton
-                color="primary"
-                aria-label="upload picture"
-                component="span"
+                color='primary'
+                aria-label='upload picture'
+                component='span'
               >
                 <PhotoCamera />
               </IconButton>
@@ -285,10 +287,10 @@ const Companies = () => {
           <TextField
             onChange={addWebsiteHandler}
             className={[classes.addField]}
-            id="standard-basic"
-            label="website"
+            id='standard-basic'
+            label='website'
           />
-          <Fab onClick={sendData} color="primary" variant="extended">
+          <Fab onClick={sendData} color='primary' variant='extended'>
             <Send />
             send
           </Fab>
